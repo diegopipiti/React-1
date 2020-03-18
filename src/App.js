@@ -57,7 +57,7 @@ class App extends Component {
       giocatori,
     }
 
-    this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe
+    this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
   }
 
   onDismiss(id){
