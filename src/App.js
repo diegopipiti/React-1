@@ -48,14 +48,39 @@ giocatori = [nuovoGiocatoreA, nuovoGiocatoreB];
 
 
 class App extends Component {
+
+  constructor(props)
+  {
+    super(props);
+
+    this.state = {
+      giocatori,
+    }
+
+    this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe
+  }
+
+  onDismiss(id){
+    const updatedList = this.state.giocatori.filter(giocatore => giocatore.id !== id);
+
+    this.setState({giocatori: updatedList});
+  }
+
   render() {
       return (
         <div className="App">
-          {giocatori.map(item => (<div key={item.id}>
+          {this.state.giocatori.map(item => (<div key={item.id}>
                                     <span>ID: {item.id} </span>
                                     <span>Nome: {item.nome} </span>
                                     <span>Punteggio: {item.punteggio} </span>
                                     <span>Totale: {item.totale}</span>
+                                    <span>
+                                      <button
+                                        onClick={()=>this.onDismiss(item.id)}
+                                        type="button">
+                                          Dismiss
+                                        </button>
+                                    </span>
                                   </div>))}
         </div>
       );
