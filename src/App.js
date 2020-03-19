@@ -187,13 +187,16 @@ class App extends Component {
 
   render() {
       return (
-        <div className="App">
-          <Search 
-            value = {this.state.searchTerm}
-            onChange = {this.onSearchChange}
-          >
-            Cerca
-          </Search>
+        <div className="page">
+          <div className="interactions">
+            <Search 
+              value = {this.state.searchTerm}
+              onChange = {this.onSearchChange}
+            >
+              Cerca
+            </Search>
+          </div>
+
           <Table 
             list = {this.state.listaCarte}
             pattern = {this.state.searchTerm}
@@ -229,8 +232,8 @@ class Table extends Component
     const {list, pattern, onDismiss} = this.props;
 
     return(
-    <div>
-      {list.filter(isSearched(pattern)).map(item => (<div key={item.id}>
+    <div className="table">
+      {list.filter(isSearched(pattern)).map(item => (<div key={item.id} className= "table-row">
                                                       <span>ID: {item.id} </span>
                                                       <span>Nome: {item.nome} </span>
                                                       <span>Colore: {item.colore} </span>
@@ -238,7 +241,9 @@ class Table extends Component
                                                       <span>
                                                         <Button
                                                           onClick={()=> onDismiss(item.id)}
-                                                          type="button">
+                                                          type="button"
+                                                          className="buttom-inline"
+                                                          >
                                                             Dismiss
                                                           </Button>
                                                       </span>
