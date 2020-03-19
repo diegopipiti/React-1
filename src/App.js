@@ -168,6 +168,140 @@ class App extends Component {
       giocatori,
       listaCarte : mazzo.listaCarte,
       searchTerm: '',
+    }
+
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
+  }
+
+  onDismiss(id){
+    const updatedList = this.state.listaCarte.filter(carta => carta.id !== id);
+
+    this.setState({listaCarte: updatedList});
+  }
+
+  onSearchChange(event) 
+  {
+    this.setState({searchTerm: event.target.value});
+  }
+
+  render() {
+      return (
+        <div className="App">
+          <Search 
+            value = {this.state.searchTerm}
+            onChange = {this.onSearchChange}
+          />
+          <Table 
+            list = {this.state.listaCarte}
+            pattern = {this.state.searchTerm}
+            onDismiss = {this.onDismiss}
+          />
+        </div>
+      );
+  }
+}
+
+class Search extends Component
+{
+  render()
+  {
+    const {value, onChange} = this.props;
+
+    return(
+      <form>
+          <input
+            type = "text"
+            value = {value}
+            onChange = {onChange}
+          />
+      </form>
+    );
+  }
+}
+
+class Table extends Component
+{
+  render()
+  {
+    const {list, pattern, onDismiss} = this.props;
+
+    return(
+    <div>
+      {list.filter(isSearched(pattern)).map(item => (<div key={item.id}>
+                                                      <span>ID: {item.id} </span>
+                                                      <span>Nome: {item.nome} </span>
+                                                      <span>Colore: {item.colore} </span>
+                                                      <span>Valore: {item.valore}</span>
+                                                      <span>
+                                                        <button
+                                                          onClick={()=> onDismiss(item.id)}
+                                                          type="button">
+                                                            Dismiss
+                                                          </button>
+                                                      </span>
+                                                    </div>))}
+      
+    </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+
+
+
+
+
+/* CODICE IMPOSTATO AUTONOMAMENTE DALLE ULTIME VERSIONI DI CREATE-REACT CHE PERO' NON UTILIZZA LA CLASSE MA ANCORA LE FUNZIONE STILE ES5. BOH?!?
+function App() {
+
+
+  Player.id = 0;
+
+
+  let nuovoGiocatoreA = new Player("Achille");
+
+  let nuovoGiocatoreB = new Player("Ettore");
+
+  giocatori = [nuovoGiocatoreA, nuovoGiocatoreB];
+
+  return (
+    <div className="App">
+      {giocatori.map(item => (<div key={item.id}>
+                                <span>ID: {item.id} </span>
+                                <span>Nome: {item.nome} </span>
+                                <span>Punteggio: {item.punteggio} </span>
+                                <span>Totale: {item.totale}</span>
+                              </div>))}
+    </div>
+  );
+
+
+}
+
+export default App;
+
+
+
+
+
+
+/* CODICE FUNZIONANTE SENZA SEPARAZIONE DEI COMPONENT. Rif.: Fino a "Split up Component"
+
+class App extends Component {
+
+  constructor(props)
+  {
+    super(props);
+
+    this.state = {
+      giocatori,
+      listaCarte : mazzo.listaCarte,
+      searchTerm: '',
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -192,7 +326,7 @@ class App extends Component {
           <form>
             <input
             type="text"
-            value={searchTerm}// Da capire meglio. Rif. libro React par. "Controlled Component"
+            value={this.state.searchTerm}// Da capire meglio. Rif. libro React par. "Controlled Component"
             onChange={this.onSearchChange}
             />
           </form>
@@ -216,7 +350,7 @@ class App extends Component {
 }
 export default App;
 
-
+*/
 
 
 
