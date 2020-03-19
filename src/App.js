@@ -4,8 +4,6 @@ import './App.css';
 
 class Player
   {
-    
-    
     static nextId()
     {
       return Player.id++;
@@ -36,15 +34,120 @@ class Player
     }
   }
 
+let nomi = 
+[
+    'Asso',
+    'Due',
+    'Tre',
+    'Quattro',
+    'Cinque',
+    'Sei',
+    'Sette',
+    'Fante',
+    'Cavallo',
+    'Re'
+];
+
+let valori = [1,2,3,4,5,6,7,8,9,10];
+
+let colori =
+[
+    'Denari',
+    'Spade',
+    'Bastoni',
+    'Coppe'
+]
+
+class Carta
+{
+  static nextId()
+  {
+    return Carta.id++;
+  }
+  
+  id;
+  nome;
+  valore;
+  colore;
+  
+  constructor(nome, valore, colore)
+  {
+    this.id = Carta.nextId();
+    this.nome = nome;
+    this.valore = valore;
+    this.colore = colore;
+  }
+
+  toString()
+  {
+      return `${this.nome} di ${this.colore}`;
+  }
+}
+
+class Deck
+{
+    
+  listaCarte = [];
+
+  indice = 0;
+
+  constructor()
+  {
+      this.initialize();
+  }
+
+  initialize()
+  {
+      colori.forEach(element => {
+          for (let i = 0; i<10; i++)
+          {
+              let carta = new Carta(nomi[i], valori[i], element);
+  
+              this.listaCarte.push(carta);
+          }
+      });
+  }
+
+  visualizzaDeck()
+  {
+      this.listaCarte.forEach(element => {
+          console.log(element.toString());
+      });
+  }
+
+  mescola = function ()
+  {
+      let counter = this.listaCarte.length - 1;
+      
+      while(counter > -1)
+      {
+          let indice = Math.floor(Math.random() * 9);
+  
+          let temp = this.listaCarte[counter];
+  
+          this.listaCarte[counter] = this.listaCarte[indice];
+  
+          this.listaCarte[indice] = temp;
+  
+          counter--;
+      }
+  
+  }
+}
+
 let giocatori;
 
 Player.id = 0;
+
+Carta.id = 0;
 
 let nuovoGiocatoreA = new Player("Achille");
 
 let nuovoGiocatoreB = new Player("Ettore");
 
 giocatori = [nuovoGiocatoreA, nuovoGiocatoreB];
+
+let mazzo = new Deck();
 
 
 class App extends Component {
@@ -55,33 +158,34 @@ class App extends Component {
 
     this.state = {
       giocatori,
+      listaCarte : mazzo.listaCarte,
     }
 
     this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
   }
 
   onDismiss(id){
-    const updatedList = this.state.giocatori.filter(giocatore => giocatore.id !== id);
+    const updatedList = this.state.listaCarte.filter(carta => carta.id !== id);
 
-    this.setState({giocatori: updatedList});
+    this.setState({listaCarte: updatedList});
   }
 
   render() {
       return (
         <div className="App">
-          {this.state.giocatori.map(item => (<div key={item.id}>
-                                    <span>ID: {item.id} </span>
-                                    <span>Nome: {item.nome} </span>
-                                    <span>Punteggio: {item.punteggio} </span>
-                                    <span>Totale: {item.totale}</span>
-                                    <span>
-                                      <button
-                                        onClick={()=>this.onDismiss(item.id)}
-                                        type="button">
-                                          Dismiss
-                                        </button>
-                                    </span>
-                                  </div>))}
+          {this.state.listaCarte.map(item => (<div key={item.id}>
+                                                      <span>ID: {item.id} </span>
+                                                      <span>Nome: {item.nome} </span>
+                                                      <span>Colore: {item.colore} </span>
+                                                      <span>Valore: {item.valore}</span>
+                                                      <span>
+                                                        <button
+                                                          onClick={()=>this.onDismiss(item.id)}
+                                                          type="button">
+                                                            Dismiss
+                                                          </button>
+                                                      </span>
+                                                    </div>))}
         </div>
       );
   }
