@@ -135,6 +135,14 @@ class Deck
   }
 }
 
+function isSearched(searchTerm)
+{
+  return function (item)
+  {
+    return item.nome.toLowerCase().includes(searchTerm.toLowerCase()); //Ritorna un boolean
+  }
+}
+
 let giocatori;
 
 Player.id = 0;
@@ -159,8 +167,10 @@ class App extends Component {
     this.state = {
       giocatori,
       listaCarte : mazzo.listaCarte,
-    }
+      searchTerm: '',
+    };
 
+    this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
   }
 
@@ -170,10 +180,24 @@ class App extends Component {
     this.setState({listaCarte: updatedList});
   }
 
+  onSearchChange(event) 
+  {
+    this.setState({searchTerm: event.target.value});
+  }
+
   render() {
       return (
         <div className="App">
-          {this.state.listaCarte.map(item => (<div key={item.id}>
+
+          <form>
+            <input
+            type="text"
+            value={searchTerm}// Da capire meglio. Rif. libro React par. "Controlled Component"
+            onChange={this.onSearchChange}
+            />
+          </form>
+
+          {this.state.listaCarte.filter(isSearched(this.state.searchTerm)).map(item => (<div key={item.id}>
                                                       <span>ID: {item.id} </span>
                                                       <span>Nome: {item.nome} </span>
                                                       <span>Colore: {item.colore} </span>
