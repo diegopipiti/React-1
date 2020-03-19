@@ -201,7 +201,6 @@ class App extends Component {
           <Blocchetto
           list = {this.state.giocatori}
           >
-
           </Blocchetto>
           
 
@@ -225,9 +224,9 @@ class Blocchetto extends Component
       list.map(item => 
         (
           <span className="table-row">
-            <span>{item.nome}</span>
-            <span>{item.totale}</span>
-            <span>{item.punteggio}</span>
+            <span>Nome:</span> <span className="casella">{item.nome}</span>
+            <span>Totale:</span> <span className="casella"> {item.totale}</span>
+            <span>Punteggio:</span> <span className="casella"> {item.punteggio}</span>
           </span>
         )
       )

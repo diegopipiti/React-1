@@ -85,6 +85,16 @@
   padding: 0 5px;
   }
 
+.casella {
+  font-weight: bold;
+}
+
+.prova_span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 5px;
+  }
+
 .button-inline {
   border-width: 0;
   background: transparent;
