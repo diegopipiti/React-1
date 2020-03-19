@@ -197,10 +197,13 @@ class App extends Component {
             </Search>
           </div>
 
-          {this.state.giocatori.map(item => 
-          (
-            <div>{item.nome}</div>
-          ))}
+          
+          <Blocchetto
+          list = {this.state.giocatori}
+          >
+
+          </Blocchetto>
+          
 
           {/* <Table 
             list = {this.state.listaCarte}
@@ -209,6 +212,26 @@ class App extends Component {
           /> */}
         </div>
       );
+  }
+}
+
+class Blocchetto extends Component
+{
+  render()
+  {
+    const {children, list} = this.props;
+
+    return(
+      list.map(item => 
+        (
+          <span className="table-row">
+            <span>{item.nome}</span>
+            <span>{item.totale}</span>
+            <span>{item.punteggio}</span>
+          </span>
+        )
+      )
+    );
   }
 }
 
