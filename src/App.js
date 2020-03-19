@@ -197,11 +197,16 @@ class App extends Component {
             </Search>
           </div>
 
-          <Table 
+          {this.state.giocatori.map(item => 
+          (
+            <div>{item.nome}</div>
+          ))}
+
+          {/* <Table 
             list = {this.state.listaCarte}
             pattern = {this.state.searchTerm}
             onDismiss = {this.onDismiss}
-          />
+          /> */}
         </div>
       );
   }
