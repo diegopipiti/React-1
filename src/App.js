@@ -191,7 +191,9 @@ class App extends Component {
           <Search 
             value = {this.state.searchTerm}
             onChange = {this.onSearchChange}
-          />
+          >
+            Cerca
+          </Search>
           <Table 
             list = {this.state.listaCarte}
             pattern = {this.state.searchTerm}
@@ -206,11 +208,11 @@ class Search extends Component
 {
   render()
   {
-    const {value, onChange} = this.props;
+    const {value, onChange, children} = this.props;
 
     return(
       <form>
-          <input
+          {children}<input
             type = "text"
             value = {value}
             onChange = {onChange}
@@ -234,15 +236,39 @@ class Table extends Component
                                                       <span>Colore: {item.colore} </span>
                                                       <span>Valore: {item.valore}</span>
                                                       <span>
-                                                        <button
+                                                        <Button
                                                           onClick={()=> onDismiss(item.id)}
                                                           type="button">
                                                             Dismiss
-                                                          </button>
+                                                          </Button>
                                                       </span>
                                                     </div>))}
       
     </div>
+    );
+  }
+}
+
+
+class Button extends Component
+{
+  render()
+  {
+    const
+    {
+      onClick,
+      className = '',
+      children,
+    } = this.props;
+
+    return(
+      <button
+        onClick = {onClick}
+        className = {className}
+        type = "button"
+      >
+        {children}
+      </button>
     );
   }
 }
