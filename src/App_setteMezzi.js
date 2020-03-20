@@ -168,10 +168,12 @@ class App extends Component {
       giocatori,
       listaCarte : mazzo.listaCarte,
       searchTerm: '',
+      manoA: giocatori[0].mano,
     }
 
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
+    this.carta = this.cartaGiu.bind(this);
   }
 
   onDismiss(id){
@@ -183,6 +185,15 @@ class App extends Component {
   onSearchChange(event) 
   {
     this.setState({searchTerm: event.target.value});
+  }
+
+  cartaGiu()
+  {
+    this.state.giocatori[0].mano = this.state.listaCarte[0];
+    
+    this.setState(
+      { giocatori }
+    );
   }
 
   render() {
@@ -197,13 +208,49 @@ class App extends Component {
             </Search>
           </div>
 
-          <Table 
+          <Blocchetto
+          list = {this.state.giocatori}
+          >
+          </Blocchetto>
+          
+          <Button
+          onClick={()=>this.cartaGiu()}
+          type="button"
+          >
+            Aggiungi Carta
+          </Button>
+
+          {/* <Table 
             list = {this.state.listaCarte}
             pattern = {this.state.searchTerm}
             onDismiss = {this.onDismiss}
-          />
+          /> */}
         </div>
       );
+  }
+}
+
+class Blocchetto extends Component
+{
+  render()
+  {
+    const {children, 
+            list,
+            className = '',
+          } = this.props;
+
+    return(
+      list.map(item => 
+        (
+          <span className="table-row">
+            <span>Nome:</span> <span className="casella">{item.nome}</span>
+            <span>Totale:</span> <span className="casella"> {item.totale}</span>
+            <span>Punteggio:</span> <span className="casella"> {item.punteggio}</span>
+            <span>Mano:</span> <span className="casella"> {item.mano}</span>
+          </span>
+        )
+      )
+    );
   }
 }
 

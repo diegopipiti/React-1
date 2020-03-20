@@ -145,7 +145,7 @@ function isSearched(searchTerm)
 {
   return function (item)
   {
-    return item.title.toLowerCase().includes(searchTerm.toLowerCase()); //Ritorna un boolean
+    return item.nome.toLowerCase().includes(searchTerm.toLowerCase()); //Ritorna un boolean
   }
 }
 
@@ -173,17 +173,15 @@ class App extends Component {
     this.state = {
       giocatori,
       listaCarte : mazzo.listaCarte,
-      searchTerm: DEFAULT_QUERY,
-      result: null,
+      searchTerm: '',
     }
 
-    this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this); //Per far diventare onDimiss un metodo di classe. 
   }
 
   onDismiss(id){
-    const isNotId = item => item.objectID !== id;
+    const updatedList = this.state.listaCarte.filter(carta => carta.id !== id);
 
     this.setState({listaCarte: updatedList});
   }
@@ -193,44 +191,25 @@ class App extends Component {
     this.setState({searchTerm: event.target.value});
   }
 
-  setSearchTopStories(result){
-    this.setState({result});
-  }
-
-  componentDidMount()
-  {
-    const{ searchTerm } = this.state;
-
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
-      .then(response => response.json())
-      .then(result => this.setSearchTopStories(result))
-      .catch(error => error);
-  }
-
   render() {
-      
-    const {searchTerm, result} = this.state;
+      return (
+        <div className="page">
+          <div className="interactions">
+            <Search 
+              value = {this.state.searchTerm}
+              onChange = {this.onSearchChange}
+            >
+              Cerca
+            </Search>
+          </div>
 
-    if (!result) { return null; }
-
-    return (
-      <div className="page">
-        <div className="interactions">
-          <Search 
-            value = {this.state.searchTerm}
-            onChange = {this.onSearchChange}
-          >
-            Cerca
-          </Search>
+          <Table 
+            list = {this.state.listaCarte}
+            pattern = {this.state.searchTerm}
+            onDismiss = {this.onDismiss}
+          />
         </div>
-
-        <Table 
-          list = {result.hits}
-          pattern = {this.state.searchTerm}
-          onDismiss = {this.onDismiss}
-        />
-      </div>
-    );
+      );
   }
 }
 
@@ -258,28 +237,25 @@ class Table extends Component
   {
     const {list, pattern, onDismiss} = this.props;
 
-    return (
-      <div className = "table">
-        {list.filter(isSearched(pattern)).map(item =>
-          <div key={item.objectID} className = "table-row">
-            
-            <span>
-            <a href={item.url}>{item.title}</a>
-            </span>
-            
-            <span>{item.author}</span>
-            <span>{item.num_comments}</span>
-            <span>{item.points}</span>
-            
-            <span>
-            <Button onClick={() => onDismiss(item.objectID)}>
-            Dismiss
-            </Button>
-            </span>
-          
-          </div>
-        )}
-      </div>
+    return(
+    <div className="table">
+      {list.filter(isSearched(pattern)).map(item => (<div key={item.id} className= "table-row">
+                                                      <span>ID: {item.id} </span>
+                                                      <span>Nome: {item.nome} </span>
+                                                      <span>Colore: {item.colore} </span>
+                                                      <span>Valore: {item.valore}</span>
+                                                      <span>
+                                                        <Button
+                                                          onClick={()=> onDismiss(item.id)}
+                                                          type="button"
+                                                          className="buttom-inline"
+                                                          >
+                                                            Dismiss
+                                                          </Button>
+                                                      </span>
+                                                    </div>))}
+      
+    </div>
     );
   }
 }
